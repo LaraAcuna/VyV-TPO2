@@ -17,7 +17,7 @@ public class Plantacion {
     final static int ESTADO_IMPRODUCTIVO = 3;
 
     //Métodos Privados
-    private double cantidadTipo(int tipoParcela){
+    public double cantidadTipo(int tipoParcela){
         if(tipoParcela == PARCELA_CHICA)
             return 2000;
         else if(tipoParcela == PARCELA_MEDIANA)
@@ -27,25 +27,25 @@ public class Plantacion {
         return 0; //Caso no contemplado
     }
 
-    private boolean permitirCambioCultivos(int cantidad){
+    public boolean permitirCambioCultivos(int cantidad){
         return cantidad > 0 && cantidad <= LIMITE_CULTIVOS;
     }
 
-    private double calcularPO(){
+    public double calcularPO(){
         return 100 - ((metrosOcupados*100)/metrosTotales);
     }
 
-    private int calcularEstado(double po){
+    public int calcularEstado(double po){
         if(po > 20)
             return ESTADO_IMPRODUCTIVO;
-        if(po <= 0 && po <= 20)
+        if(po >= 0 && po <= 20)
             return ESTADO_PRODUCTIVO;
         if(po >= -20 && po < 0)
             return ESTADO_CON_RESERVA;
         return ESTADO_EXCEDIDO;
     }
 
-    private boolean transicionValida(int estado, int nuevo_estado){
+    public boolean transicionValida(int estado, int nuevo_estado){
         if(estado == ESTADO_CON_RESERVA || estado == nuevo_estado)
             return true;
         if(estado == ESTADO_IMPRODUCTIVO && nuevo_estado != ESTADO_PRODUCTIVO)
