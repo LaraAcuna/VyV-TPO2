@@ -45,7 +45,7 @@ public class Plantacion {
         return ESTADO_EXCEDIDO;
     }
 
-    private boolean transicionValida(int nuevo_estado){
+    private boolean transicionValida(int estado, int nuevo_estado){
         if(estado == ESTADO_CON_RESERVA || estado == nuevo_estado)
             return true;
         if(estado == ESTADO_IMPRODUCTIVO && nuevo_estado != ESTADO_PRODUCTIVO)
@@ -120,7 +120,7 @@ public class Plantacion {
         parcelas++;
         po = calcularPO();
         nuevo_estado = calcularEstado(po);
-        if(transicionValida(nuevo_estado)){
+        if(transicionValida(estado, nuevo_estado)){
             estado = nuevo_estado;
         }else{
             metrosTotales = metros_totales_previo;
@@ -138,7 +138,7 @@ public class Plantacion {
             parcelas--;
             po = calcularPO();
             nuevo_estado = calcularEstado(po);
-            if(transicionValida(nuevo_estado)){
+            if(transicionValida(estado, nuevo_estado)){
                 estado = nuevo_estado;
             }else{
                 metrosTotales = metros_totales_previo;
@@ -157,7 +157,7 @@ public class Plantacion {
             cultivos+=cantidad;
             po = calcularPO();
             nuevo_estado = calcularEstado(po);
-            if(transicionValida(nuevo_estado)){
+            if(transicionValida(estado, nuevo_estado)){
                 estado = nuevo_estado;
             }else{
                 metrosOcupados = metros_ocupados_previo;
@@ -176,7 +176,7 @@ public class Plantacion {
             cultivos-=cantidad;
             po = calcularPO();
             nuevo_estado = calcularEstado(po);
-            if(transicionValida(nuevo_estado)){
+            if(transicionValida(estado, nuevo_estado)){
                 estado = nuevo_estado;
             }else{
                 metrosOcupados = metros_ocupados_previo;
