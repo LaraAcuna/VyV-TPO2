@@ -12,7 +12,7 @@ public class PlantacionTests {
     @Test
     public void calcularPo(){
         Plantacion test = new Plantacion();
-        double po = test.calcularPO();
+        double po = test.calcularPO(0, 8000);
         Assertions.assertEquals(100, po);
     }
 

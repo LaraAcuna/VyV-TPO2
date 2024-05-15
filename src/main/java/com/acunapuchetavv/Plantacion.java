@@ -16,7 +16,7 @@ public class Plantacion {
     final static int ESTADO_CON_RESERVA = 2;
     final static int ESTADO_IMPRODUCTIVO = 3;
 
-    //Métodos Privados
+    //Métodos Auxiliares
     public double cantidadTipo(int tipoParcela){
         if(tipoParcela == PARCELA_CHICA)
             return 2000;
@@ -31,7 +31,7 @@ public class Plantacion {
         return cantidad > 0 && cantidad <= LIMITE_CULTIVOS;
     }
 
-    public double calcularPO(){
+    public double calcularPO(double metrosOcupados, double metrosTotales){
         return 100 - ((metrosOcupados*100)/metrosTotales);
     }
 
@@ -56,24 +56,6 @@ public class Plantacion {
             return false;
         return true;
     }
-
-    /*
-    private void restaurar(int cultivos_previo, int parcelas_previo, double metros_totales_previo, double metros_ocupados_previo){
-        cultivos = cultivos_previo;
-        parcelas = parcelas_previo;
-        metrosTotales = metros_totales_previo;
-        metrosOcupados = metros_ocupados_previo;
-    }
-
-    
-    private void confirmar_cambio(int cultivos_previo, int parcelas_previo, double metros_totales_previo, double metros_ocupados_previo){
-        if(transicionValida()){
-            estado = calcularEstado();
-        }else{
-            restaurar(cultivos_previo, parcelas_previo, metros_totales_previo, metros_ocupados_previo);
-        }
-    }
-    */
 
     //Métodos (eventos) Públicos
     public Plantacion(){
@@ -104,83 +86,48 @@ public class Plantacion {
         return estado;
     }
     
-    /*
-     if(transicionValida()){
-            estado = calcularEstado();
-        }else{
-            restaurar(cultivos_previo, parcelas_previo, metros_totales_previo, metros_ocupados_previo);
-        }
-     */
     public void addParcela(int tipoParcela){
-        double metros_totales_previo = metrosTotales;
-        int parcelas_previo = parcelas;
-        double po;
-        int nuevo_estado;
-        metrosTotales+=cantidadTipo(tipoParcela);
-        parcelas++;
-        po = calcularPO();
-        nuevo_estado = calcularEstado(po);
-        if(transicionValida(estado, nuevo_estado)){
+        double po = calcularPO(metrosOcupados, metrosTotales+cantidadTipo(tipoParcela));
+        int nuevo_estado = calcularEstado(po);
+        if(transicionValida(nuevo_estado, nuevo_estado)){
+            metrosTotales+=cantidadTipo(tipoParcela);
+            parcelas++;
             estado = nuevo_estado;
-        }else{
-            metrosTotales = metros_totales_previo;
-            parcelas = parcelas_previo;
         }
     }
 
     public void deleteParcela(int tipoParcela){
         if(parcelas > 0){
-            int parcelas_previo = parcelas;
-            double metros_totales_previo = metrosTotales;
-            double po;
-            int nuevo_estado;
-            metrosTotales-=cantidadTipo(tipoParcela);
-            parcelas--;
-            po = calcularPO();
-            nuevo_estado = calcularEstado(po);
+            double po = calcularPO(metrosOcupados, metrosTotales-cantidadTipo(tipoParcela));
+            int nuevo_estado = calcularEstado(po);
             if(transicionValida(estado, nuevo_estado)){
+                metrosTotales-=cantidadTipo(tipoParcela);
+                parcelas--;
                 estado = nuevo_estado;
-            }else{
-                metrosTotales = metros_totales_previo;
-                parcelas = parcelas_previo;
             }
         }
     }
 
     public void addCultivos(int cantidad){
         if(permitirCambioCultivos(cantidad)){
-            double metros_ocupados_previo = metrosOcupados;
-            int cultivos_previo = cultivos;
-            double po;
-            int nuevo_estado;
-            metrosOcupados+=cantidad * 2000;
-            cultivos+=cantidad;
-            po = calcularPO();
-            nuevo_estado = calcularEstado(po);
+            double po = calcularPO(metrosOcupados+cantidad*2000, metrosTotales);
+            int nuevo_estado = calcularEstado(po);
             if(transicionValida(estado, nuevo_estado)){
+                metrosOcupados+=cantidad * 2000;
+                cultivos+=cantidad;
                 estado = nuevo_estado;
-            }else{
-                metrosOcupados = metros_ocupados_previo;
-                cultivos = cultivos_previo;
             }
         }
     }
 
     public void deleteCultivos(int cantidad){
         if(permitirCambioCultivos(cantidad) && cultivos - cantidad >= 0){
-            double metros_ocupados_previo = metrosOcupados;
-            int cultivos_previo = cultivos;
-            double po = calcularPO();
-            int nuevo_estado;
-            metrosOcupados-=cantidad * 2000;
-            cultivos-=cantidad;
-            po = calcularPO();
-            nuevo_estado = calcularEstado(po);
+            double po = calcularPO(metrosOcupados-cantidad*2000, metrosTotales);
+            int nuevo_estado = calcularEstado(po);
             if(transicionValida(estado, nuevo_estado)){
+                metrosOcupados-=cantidad * 2000;
+                cultivos-=cantidad;
                 estado = nuevo_estado;
-            }else{
-                metrosOcupados = metros_ocupados_previo;
-                cultivos = cultivos_previo;
             }
         }
     }
