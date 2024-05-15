@@ -89,7 +89,7 @@ public class Plantacion {
     public void addParcela(int tipoParcela){
         double po = calcularPO(metrosOcupados, metrosTotales+cantidadTipo(tipoParcela));
         int nuevo_estado = calcularEstado(po);
-        if(transicionValida(nuevo_estado, nuevo_estado)){
+        if(transicionValida(estado, nuevo_estado)){
             metrosTotales+=cantidadTipo(tipoParcela);
             parcelas++;
             estado = nuevo_estado;
