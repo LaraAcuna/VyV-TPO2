@@ -48,4 +48,74 @@ public class PlantacionTests {
         Assertions.assertEquals(2, estado);
     }
 
+    @Test   
+    @DisplayName("testando getParcela")
+    public void testearGetParcelas(){
+        Plantacion thisPlantacion = new Plantacion();
+
+        int parcelas = thisPlantacion.getParcelas();
+
+        Assertions.assertEquals(2, parcelas);
+    }
+
+    @Test   
+    @DisplayName("testando getMetrosTotales")
+    public void testearGetMetrosTotales(){
+        Plantacion thisPlantacion = new Plantacion();
+
+        double metrosTotales = thisPlantacion.getMetrosTotales();
+
+        Assertions.assertEquals(8000, metrosTotales);
+    }
+
+    @Test   
+    @DisplayName("testando getEstado")
+    public void testearGetEstados(){
+        Plantacion thisPlantacion = new Plantacion();
+
+        int estado = thisPlantacion.getEstado();
+
+        Assertions.assertEquals(3, estado);
+    }
+
+    @Test   
+    @DisplayName("testando permitirCambioCultivos")
+    public void testearPermiteCambioCultivoTrue(){
+        Plantacion thisPlantacion = new Plantacion();
+
+        boolean permiteCambio = thisPlantacion.permitirCambioCultivos(2);
+
+        Assertions.assertEquals(true, permiteCambio);
+    }
+
+    @Test 
+    @DisplayName("testando permitirCambioCultivos")
+    public void testearPermiteCambioCultivoFalse(){
+        Plantacion thisPlantacion = new Plantacion();
+
+        boolean permiteCambio = thisPlantacion.permitirCambioCultivos(4);
+
+        Assertions.assertEquals(false, permiteCambio);
+    }
+
+    @Test 
+    @DisplayName("testando permitirCambioCultivos")
+    public void testearConstructor(){
+        Plantacion thisPlantacion = new Plantacion();
+
+        int cultivos = thisPlantacion.getCultivos();
+        int parcelas = thisPlantacion.getParcelas();
+        double metrosTotales = thisPlantacion.getMetrosTotales();
+        double metrosOcupados = thisPlantacion.getMetrosOcupados();
+        int estado = thisPlantacion.getEstado();
+        
+        Assertions.assertEquals(0, cultivos);
+        Assertions.assertEquals(2, parcelas);
+        Assertions.assertEquals(8000,metrosTotales);
+        Assertions.assertEquals(0, metrosOcupados);
+        Assertions.assertEquals(3, estado);
+
+    }
+
+
 }
