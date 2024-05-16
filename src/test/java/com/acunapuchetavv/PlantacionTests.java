@@ -14,21 +14,27 @@ public class PlantacionTests {
     @DisplayName("cantidadTipo debería devolver 2000")
     public void cantidadTipoParcelaChica(){
         Plantacion test = new Plantacion();
-        //Continuar...
+        
+        double cantTipo = test.cantidadTipo(0);
+        Assertions.assertEquals(2000, cantTipo);
     }
 
     @Test
     @DisplayName("cantidadTipo debería devolver 4000")
     public void cantidadTipoParcelaMediana(){
         Plantacion test = new Plantacion();
-        //Continuar...
+
+        double cantTipo = test.cantidadTipo(1);
+        Assertions.assertEquals(4000, cantTipo);
     }
 
     @Test
     @DisplayName("cantidadTipo debería devolver 5000")
     public void cantidadTipoParcelaGrande(){
         Plantacion test = new Plantacion();
-        //Continuar...
+
+        double cantTipo = test.cantidadTipo(2);
+        Assertions.assertEquals(5000, cantTipo);
     }
 
     @Test
@@ -196,7 +202,16 @@ public class PlantacionTests {
     @DisplayName("addParcela deberia cambiar correctamente los valors de metrosTotales, parcelas y estado")
     public void addParcelaAceptado(){
         Plantacion test = new Plantacion();
-        //Continuar...
+
+        test.addParcela(0);
+
+        double metrosTotales = test.getMetrosTotales();
+        int parcelas = test.getParcelas();
+        int estado = test.getEstado();
+     
+        Assertions.assertEquals(10000, metrosTotales);
+        Assertions.assertEquals(3, parcelas);
+        Assertions.assertEquals(Plantacion.ESTADO_IMPRODUCTIVO, estado);     
     }
 
     @Test
@@ -231,7 +246,10 @@ public class PlantacionTests {
     @DisplayName("addCultivos deberia cambiar correctamente los valors de metrosOcupados, cultivos y estado")
     public void addCultivosAceptado(){
         Plantacion test = new Plantacion();
-        //Continuar...
+
+
+      
+
     }
 
     @Test
