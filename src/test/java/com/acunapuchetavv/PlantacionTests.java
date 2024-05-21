@@ -305,21 +305,9 @@ public class PlantacionTests {
             Assertions.assertEquals(Plantacion.ESTADO_IMPRODUCTIVO, estado);    
     }
 
-    @Test
-    @DisplayName("addCultivos NO debería provocar cambios ya que la transición provocada no fue válida")
-    public void addCultivosRechazado(){ 
-        Plantacion test = new Plantacion();
-        test.addCultivos(4);
-        double metrosOcupados = test.getMetrosOcupados();
-            int cultivos = test.getCultivos();
-            int estado = test.getEstado();       
-            Assertions.assertEquals(0, metrosOcupados);
-            Assertions.assertEquals(0, cultivos);
-            Assertions.assertEquals(Plantacion.ESTADO_IMPRODUCTIVO, estado);  
-    }
 
     @Test
-    @DisplayName("addCultivos NO debería provocar cambios ya que la cantidad de cultivos a agregar no es válida")
+    @DisplayName("addCultivos NO debería provocar cambios ya que la transición provocada no fue válida")
     public void addCultivosInvalido(){
         Plantacion test = new Plantacion();
         test.addParcela(1);
@@ -333,6 +321,20 @@ public class PlantacionTests {
         Assertions.assertEquals(6  , cultivos);
         Assertions.assertEquals(Plantacion.ESTADO_PRODUCTIVO, estado);  
     }
+
+    @Test
+    @DisplayName("addCultivos NO debería provocar cambios ya que la cantidad de cultivos a agregar no es válida")
+    public void addCultivosRechazado(){ 
+        Plantacion test = new Plantacion();
+        test.addCultivos(4);
+        double metrosOcupados = test.getMetrosOcupados();
+            int cultivos = test.getCultivos();
+            int estado = test.getEstado();       
+            Assertions.assertEquals(0, metrosOcupados);
+            Assertions.assertEquals(0, cultivos);
+            Assertions.assertEquals(Plantacion.ESTADO_IMPRODUCTIVO, estado);  
+    }
+
 
     @Test
     @DisplayName("deleteCultivos deberia cambiar correctamente los valores de metrosOcupados, cultivos y estado")
