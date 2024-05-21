@@ -38,7 +38,8 @@ public class PlantacionTests {
     @DisplayName("cantidadTipo debería devolver 0 (tipoParcela inválido)")
     public void cantidadTipoParcelaInvalido(){
         Plantacion test = new Plantacion();
-        //Continuar...
+        double cantTipo = test.cantidadTipo(7);
+        Assertions.assertEquals(0, cantTipo);
     }
   
     @Test   
@@ -263,6 +264,7 @@ public class PlantacionTests {
   
     @Test
     @DisplayName("deleteParcela NO debería provocar cambios ya que no hay parcelas para eliminar")
+    public void deleteParcelaInvalido(){
         Plantacion test = new Plantacion(); //Plantacion comienza con 2 parcelas
         test.deleteParcela(0);
         test.deleteParcela(0);
@@ -343,6 +345,7 @@ public class PlantacionTests {
         int estado = test.getEstado();
         Assertions.assertEquals(2000, metrosOcupados);
         Assertions.assertEquals(1, cultivos);
+        Assertions.assertEquals(Plantacion.ESTADO_IMPRODUCTIVO, estado);
     }
 
     @Test
