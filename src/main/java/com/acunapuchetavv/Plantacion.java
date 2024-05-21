@@ -97,7 +97,7 @@ public class Plantacion {
     }
 
     public void deleteParcela(int tipoParcela){
-        if(parcelas > 0){
+        if(parcelas > 0 && metrosTotales > cantidadTipo(tipoParcela)){
             double po = calcularPO(metrosOcupados, metrosTotales-cantidadTipo(tipoParcela));
             int nuevo_estado = calcularEstado(po);
             if(transicionValida(estado, nuevo_estado)){

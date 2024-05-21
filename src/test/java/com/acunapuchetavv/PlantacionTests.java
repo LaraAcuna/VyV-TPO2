@@ -10,34 +10,6 @@ import org.junit.jupiter.api.Assertions;
 
 public class PlantacionTests {
 
-    @Test
-    @DisplayName("cantidadTipo debería devolver 2000")
-    public void cantidadTipoParcelaChica(){
-        Plantacion test = new Plantacion();
-        //Continuar...
-    }
-
-    @Test
-    @DisplayName("cantidadTipo debería devolver 4000")
-    public void cantidadTipoParcelaMediana(){
-        Plantacion test = new Plantacion();
-        //Continuar...
-    }
-
-    @Test
-    @DisplayName("cantidadTipo debería devolver 5000")
-    public void cantidadTipoParcelaGrande(){
-        Plantacion test = new Plantacion();
-        //Continuar...
-    }
-
-    @Test
-    @DisplayName("cantidadTipo debería devolver 0 (tipoParcela inválido)")
-    public void cantidadTipoParcelaInvalido(){
-        Plantacion test = new Plantacion();
-        //Continuar...
-    }
-
     @Test   
     @DisplayName("permitirCambioCultivos debería devolver TRUE")
     public void permitirCambioCultivosTrue(){
@@ -193,79 +165,134 @@ public class PlantacionTests {
     }
 
     @Test
-    @DisplayName("addParcela deberia cambiar correctamente los valors de metrosTotales, parcelas y estado")
-    public void addParcelaAceptado(){
-        Plantacion test = new Plantacion();
-        //Continuar...
-    }
-
-    @Test
-    @DisplayName("addParcela NO debería provocar cambios ya que la transición provocada no fue válida")
-    public void addParcelaRechazado(){
-        Plantacion test = new Plantacion();
-        //Continuar...
-    }
-
-    @Test
-    @DisplayName("deleteParcela deberia cambiar correctamente los valors de metrosTotales, parcelas y estado")
+    @DisplayName("deleteParcela deberia cambiar correctamente los valores de metrosTotales, parcelas y estado")
     public void deleteParcelaAceptado(){
         Plantacion test = new Plantacion();
-        //Continuar...
+        test.deleteParcela(0);
+        double metrosTotales = test.getMetrosTotales();
+        int parcelas = test.getParcelas();
+        int estado = test.getEstado();
+        Assertions.assertEquals(6000, metrosTotales);
+        Assertions.assertEquals(1, parcelas);
+        Assertions.assertEquals(Plantacion.ESTADO_IMPRODUCTIVO, estado);
     }
 
     @Test
     @DisplayName("deleteParcela NO debería provocar cambios ya que la transición provocada no fue válida")
     public void deleteParcelaRechazado(){
         Plantacion test = new Plantacion();
-        //Continuar...
+        /* Primero agregamos cultivos para lograr llegar a un estado inválido,
+         de lo contrario siempre se pasará a "Estado Improductivo" al no haber cultivos*/
+        test.addCultivos(3);
+        test.deleteParcela(1);
+        int parcelas = test.getParcelas();
+        double metrosTotales = test.getMetrosTotales();
+        int estado = test.getEstado();
+        Assertions.assertEquals(2, parcelas);
+        Assertions.assertEquals(8000, metrosTotales);
+        Assertions.assertEquals(Plantacion.ESTADO_IMPRODUCTIVO, estado);
     }
 
     @Test
     @DisplayName("deleteParcela NO debería provocar cambios ya que no hay parcelas para eliminar")
     public void deleteParcelaInvalido(){
-        Plantacion test = new Plantacion();
-        //Continuar...
+        Plantacion test = new Plantacion(); //Plantacion comienza con 2 parcelas
+        test.deleteParcela(0);
+        test.deleteParcela(0);
+        //Se eliminan 2 parcelas chicas, ahora deberia haber 0 parcelas. Si se quiere eliminar otra mas, no se harían cambios (parcelas no debería ser -1)
+        test.deleteParcela(0);
+        int parcelas = test.getParcelas();
+        double metrosTotales = test.getMetrosTotales();
+        int estado = test.getEstado();
+        Assertions.assertEquals(0, parcelas);
+        Assertions.assertEquals(4000, metrosTotales);
+        Assertions.assertEquals(Plantacion.ESTADO_IMPRODUCTIVO, estado);
     }
 
     @Test
-    @DisplayName("addCultivos deberia cambiar correctamente los valors de metrosOcupados, cultivos y estado")
-    public void addCultivosAceptado(){
-        Plantacion test = new Plantacion();
-        //Continuar...
-    }
-
-    @Test
-    @DisplayName("addCultivos NO debería provocar cambios ya que la transición provocada no fue válida")
-    public void addCultivosRechazado(){
-        Plantacion test = new Plantacion();
-        //Continuar...
-    }
-
-    @Test
-    @DisplayName("addCultivos NO debería provocar cambios ya que la cantidad de cultivos a agregar no es válida")
-    public void addCultivosInvalido(){
-        Plantacion test = new Plantacion();
-        //Continuar...
+    @DisplayName("deleteParcela NO debería provocar cambios ya que se quiere eliminar más metros de los disponibles")
+    public void deleteParcelaInvalidoMetros(){
+        Plantacion test = new Plantacion(); //Plantacion comienza con 8000 metros
+        test.deleteParcela(2); //Se elimina una parcela grande (resta 5000 metros)
+        test.deleteParcela(2); //Se quieren eliminar otros 5000 metros pero solo hay 3000
+        int parcelas = test.getParcelas();
+        double metrosTotales = test.getMetrosTotales();
+        int estado = test.getEstado();
+        Assertions.assertEquals(1, parcelas);
+        Assertions.assertEquals(3000, metrosTotales);
+        Assertions.assertEquals(Plantacion.ESTADO_IMPRODUCTIVO, estado);
     }
 
     @Test
     @DisplayName("deleteCultivos deberia cambiar correctamente los valores de metrosOcupados, cultivos y estado")
     public void deleteCultivosAceptado(){
         Plantacion test = new Plantacion();
-        //Continuar...
+        test.addCultivos(2);
+        test.deleteCultivos(1);
+        double metrosOcupados = test.getMetrosOcupados();
+        int cultivos = test.getCultivos();
+        int estado = test.getEstado();
+        Assertions.assertEquals(2000, metrosOcupados);
+        Assertions.assertEquals(1, cultivos);
+        Assertions.assertEquals(Plantacion.ESTADO_IMPRODUCTIVO, estado);
     }
 
     @Test
     @DisplayName("deleteCultivos NO debería provocar cambios ya que la transición provocada no fue válida")
     public void deleteCultivosRechazado(){
         Plantacion test = new Plantacion();
-        //Continuar...
+        //Preparamos el escenario
+        test.addParcela(2);
+        test.addParcela(1);
+        test.addCultivos(3);
+        test.addCultivos(3);
+        test.addCultivos(1);
+        test.addCultivos(2);
+        test.addCultivos(2);
+        /* En este punto, los datos son:
+         * MO: 22000
+         * MT: 17000
+         * Cultivos: 11
+         * Parcelas: 4
+         * Estado: EXCEDIDO
+         */
+        //Realizamos la acción que provoca la transición no posible
+        test.deleteCultivos(3); //"provocaría" un pasaje a estado PRODUCTIVO, pero es inválido
+        double metrosOcupados = test.getMetrosOcupados();
+        int cultivos = test.getCultivos();
+        int estado = test.getEstado();
+        Assertions.assertEquals(22000, metrosOcupados);
+        Assertions.assertEquals(11, cultivos);
+        Assertions.assertEquals(Plantacion.ESTADO_EXCEDIDO, estado);
     }
 
     @Test
     @DisplayName("deleteCultivos NO debería provocar cambios ya que la cantidad de cultivos a eliminar no es válida")
     public void deleteCultivosInvalido(){
         Plantacion test = new Plantacion();
-        //Continuar...
+        test.addCultivos(3);
+        test.addParcela(2);
+        test.addCultivos(3);
+        test.deleteCultivos(5);
+        double metrosOcupados = test.getMetrosOcupados();
+        int cultivos = test.getCultivos();
+        int estado = test.getEstado();
+        Assertions.assertEquals(12000, metrosOcupados);
+        Assertions.assertEquals(6, cultivos);
+        Assertions.assertEquals(Plantacion.ESTADO_PRODUCTIVO, estado);
+    }
+
+    @Test
+    @DisplayName("deleteCultivos NO debería provocar cambios ya que la cantidad de cultivos a eliminar es mayor a la disponible")
+    public void deleteCultivosInvalidoExcede(){
+        Plantacion test = new Plantacion();
+        test.addCultivos(2);
+        test.deleteCultivos(3);
+        double metrosOcupados = test.getMetrosOcupados();
+        int cultivos = test.getCultivos();
+        int estado = test.getEstado();
+        Assertions.assertEquals(4000, metrosOcupados);
+        Assertions.assertEquals(2, cultivos);
+        Assertions.assertEquals(Plantacion.ESTADO_IMPRODUCTIVO, estado);
     }
 }
