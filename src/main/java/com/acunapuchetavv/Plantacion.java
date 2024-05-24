@@ -36,16 +36,21 @@ public class Plantacion {
     }
 
     public int calcularEstado(double po){
-        if(po > 20)
-            return ESTADO_IMPRODUCTIVO;
-        if(po >= 0 && po <= 20)
-            return ESTADO_PRODUCTIVO;
-        if(po >= -20 && po < 0)
-            return ESTADO_CON_RESERVA;
-        return ESTADO_EXCEDIDO;
+        if(!Double.isNaN(po)){
+            if(po > 20)
+                return ESTADO_IMPRODUCTIVO;
+            if(po >= 0 && po <= 20)
+                return ESTADO_PRODUCTIVO;
+            if(po >= -20)
+                return ESTADO_CON_RESERVA;
+            return ESTADO_EXCEDIDO;
+        }
+        return -1;
     }
 
     public boolean transicionValida(int estado, int nuevo_estado){
+        if(nuevo_estado == -1)
+            return false;
         if(estado == ESTADO_CON_RESERVA || estado == nuevo_estado)
             return true;
         if(estado == ESTADO_IMPRODUCTIVO && nuevo_estado != ESTADO_PRODUCTIVO)

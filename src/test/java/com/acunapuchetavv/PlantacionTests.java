@@ -58,6 +58,14 @@ public class PlantacionTests {
         Assertions.assertFalse(permiteCambio);
     }
 
+    //AGREGADO Para corregir linea 31 Valor Límite 0 PITEST 
+    @Test 
+    @DisplayName("permitirCambioCultivos con valor límite 0 debería devolver FALSE")
+    public void permitirCambioCultivosValorLimiteFalse(){
+        Plantacion test = new Plantacion();
+        boolean permiteCambio = test.permitirCambioCultivos(0);
+        Assertions.assertFalse(permiteCambio);
+    }
 
     @Test
     @DisplayName("calcularPo debería devolver 100")
@@ -75,6 +83,25 @@ public class PlantacionTests {
         Assertions.assertEquals(0, estado);
     }
 
+    //AGREGADO Para corregir linea 39 PITEST
+    @Test
+    @DisplayName("calcularEstado LIMITE debería devolver 0 (PRODUCTIVO)")
+    public void calcularEstadoLimiteDaEstadoProductivo(){
+        Plantacion test = new Plantacion();
+        int estado = test.calcularEstado(20);
+        Assertions.assertEquals(0, estado);
+    }
+    //
+
+    //Agregado para corregir test linea 43 valor limite 0 PITEST
+    @Test
+    @DisplayName("calcularEstado VALOR LIMITE 0 debería devolver 0 (PRODUCTIVO)")
+    public void calcularEstadoLimiteCeroDaEstadoProductivo(){
+        Plantacion test = new Plantacion();
+        int estado = test.calcularEstado(0);
+        Assertions.assertEquals(0, estado);
+    }
+
     @Test
     @DisplayName("calcularEstado debería devolver 3 (IMPRODUCTIVO)")
     public void calcularEstadoDaEstadoImproductivo(){
@@ -82,6 +109,7 @@ public class PlantacionTests {
         int estado = test.calcularEstado(50);
         Assertions.assertEquals(3, estado);
     }
+
 
     @Test
     @DisplayName("calcularEstado debería devolver 1 (EXCEDIDO)")
@@ -97,6 +125,24 @@ public class PlantacionTests {
         Plantacion test = new Plantacion();
         int estado = test.calcularEstado(-5);
         Assertions.assertEquals(2, estado);
+    }
+
+    //Agregado para corregir test linea 43 valor limite -20 PITEST
+    @Test
+    @DisplayName("calcularEstado VALOR LIMITE -20 debería devolver 2 (CON RESERVA)")
+    public void calcularEstadoLimiteMenosVeinteDaEstadoConReserva(){
+        Plantacion test = new Plantacion();
+        int estado = test.calcularEstado(-20);
+        Assertions.assertEquals(2, estado);
+    }
+
+    //Agregado para corregir nuevo caso PITEST
+    @Test
+    @DisplayName("calcularEstado debería devolver -1 si es NaN")
+    public void calcularEstadoNaN(){
+        Plantacion test = new Plantacion();
+        int estado = test.calcularEstado(Double.NaN);
+        Assertions.assertEquals(-1, estado);
     }
 
     @Test
@@ -136,6 +182,15 @@ public class PlantacionTests {
     public void TransicionInvalida(){
         Plantacion test = new Plantacion();
         boolean transicionInvalida = test.transicionValida(Plantacion.ESTADO_IMPRODUCTIVO, Plantacion.ESTADO_EXCEDIDO);
+        Assertions.assertFalse(transicionInvalida);
+    }
+
+    //Agregado para cubrir caso nuevo PITEST
+    @Test
+    @DisplayName("transicionValida que falla por estado -1")
+    public void TransicionInvalidaNaN(){
+        Plantacion test = new Plantacion();
+        boolean transicionInvalida = test.transicionValida(Plantacion.ESTADO_IMPRODUCTIVO, -1);
         Assertions.assertFalse(transicionInvalida);
     }
 
@@ -279,7 +334,22 @@ public class PlantacionTests {
     }
 
     @Test
-    @DisplayName("deleteParcela NO debería provocar cambios ya que se quiere eliminar más metros de los disponibles")
+    @DisplayName("deleteParcela que provoca que hayan 0 metrosTotales, pero no se puede calcular un PO con metrosTotales = 0")
+    public void deleteParcelaInvalidoCeroMetros(){
+        Plantacion test = new Plantacion(); //Plantacion comienza con 8000 metros
+        test.deleteParcela(1); //Se elimina una parcela mediana (resta 4000 metros)
+        test.deleteParcela(1); //Se quieren eliminar otros 4000 metros, habiendo 4000
+        int parcelas = test.getParcelas();
+        double metrosTotales = test.getMetrosTotales();
+        int estado = test.getEstado();
+        Assertions.assertEquals(1, parcelas);
+        Assertions.assertEquals(4000, metrosTotales);
+        Assertions.assertEquals(Plantacion.ESTADO_IMPRODUCTIVO, estado);
+    }
+
+    //Agregado para corregir test linea 100 metrosTotales == cantidadTipo PITEST
+    @Test
+    @DisplayName("deleteParcela debería provocar cambios ya que se quiere eliminar más metros de los disponibles")
     public void deleteParcelaInvalidoMetros(){
         Plantacion test = new Plantacion(); //Plantacion comienza con 8000 metros
         test.deleteParcela(2); //Se elimina una parcela grande (resta 5000 metros)
@@ -406,6 +476,21 @@ public class PlantacionTests {
         int estado = test.getEstado();
         Assertions.assertEquals(4000, metrosOcupados);
         Assertions.assertEquals(2, cultivos);
+        Assertions.assertEquals(Plantacion.ESTADO_IMPRODUCTIVO, estado);
+    }
+
+    //Agregado para corregir linea 129 PITEST, caso valor limite = 0
+    @Test
+    @DisplayName("deleteCultivos donde quedan 0 cultivos")
+    public void deleteCultivosValorLimiteCero(){
+        Plantacion test = new Plantacion();
+        test.addCultivos(2);
+        test.deleteCultivos(2);
+        double metrosOcupados = test.getMetrosOcupados();
+        int cultivos = test.getCultivos();
+        int estado = test.getEstado();
+        Assertions.assertEquals(0, metrosOcupados);
+        Assertions.assertEquals(0, cultivos);
         Assertions.assertEquals(Plantacion.ESTADO_IMPRODUCTIVO, estado);
     }
 }
