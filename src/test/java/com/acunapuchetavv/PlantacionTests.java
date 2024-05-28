@@ -136,7 +136,7 @@ public class PlantacionTests {
         Assertions.assertEquals(2, estado);
     }
 
-    //Agregado para corregir nuevo caso PITEST
+    //Agregado para corregir nuevo caso PITEST, cuando po = NaN
     @Test
     @DisplayName("calcularEstado debería devolver -1 si es NaN")
     public void calcularEstadoNaN(){
@@ -185,7 +185,7 @@ public class PlantacionTests {
         Assertions.assertFalse(transicionInvalida);
     }
 
-    //Agregado para cubrir caso nuevo PITEST
+    //Agregado para cubrir caso nuevo PITEST, estado -1
     @Test
     @DisplayName("transicionValida que falla por estado -1")
     public void TransicionInvalidaNaN(){
@@ -333,6 +333,7 @@ public class PlantacionTests {
         Assertions.assertEquals(Plantacion.ESTADO_IMPRODUCTIVO, estado);
     }
 
+    //Agregado para corregir test linea 100 metrosTotales == cantidadTipo PITEST
     @Test
     @DisplayName("deleteParcela que provoca que hayan 0 metrosTotales, pero no se puede calcular un PO con metrosTotales = 0")
     public void deleteParcelaInvalidoCeroMetros(){
@@ -347,7 +348,7 @@ public class PlantacionTests {
         Assertions.assertEquals(Plantacion.ESTADO_IMPRODUCTIVO, estado);
     }
 
-    //Agregado para corregir test linea 100 metrosTotales == cantidadTipo PITEST
+    
     @Test
     @DisplayName("deleteParcela debería provocar cambios ya que se quiere eliminar más metros de los disponibles")
     public void deleteParcelaInvalidoMetros(){
